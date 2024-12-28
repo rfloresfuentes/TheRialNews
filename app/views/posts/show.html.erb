@@ -3,12 +3,66 @@
 <%= render @post %>
 
 <div>
-  <%= link_to "Volver", posts_path %>
+  <%= link_to "Volver a Noticias", posts_path %>
     <% if user_signed_in? %>
       <% if current_user.id == @post.user_id %>
-        <%= link_to "Editar", edit_post_path(@post) %> |
+        <%= link_to "Editar esta Noticia", edit_post_path(@post) %> |
         <%= button_to "Eliminar", @post, method: :delete %>
       <% end %>
     <% end %>
+</div>
+
+<p style="color: green"><%= notice %></p>
+
+<div>
+  <h1 class="my-5 text-center">
+    <%= @post.title %>
+  </h1>
+  <div class="text-center mb-5">
+    <%= image_tag @post.image, class: "img-fluid w-25" %>
+  </div>
+  <div class="card">
+    <div class="card-body mb-5">
+      <%= @post.description %>
+    </div>
+  </div>
+</div>
+
+<div>
+  <% if user_signed_in? && current_user.registrado? %>
+    <%= link_to "Editar", edit_post_path(@post), class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<div>    
+  <% if current_user&.admin? %>
+    <%= button_to "Eliminar esta Noticia", @post, method: :delete, class: "btn btn-outline-danger mt-2" %>
+  <% end %>
+</div>
+
+<div>
+  <%= link_to "Volver a las Noticias", posts_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<% if user_signed_in? && current_user.registrado? %>
+  <%= link_to "Comentar", new_comment_path(@comment), class: "btn btn-primary btn-sm" %>
+<% end %>
+
+<h4 class="my-2 text-center">Comentarios</h4>
+<div>
+  <% @comments.each do |comment|%>
+    <div class="card my-2">
+      <p>Autor: <%= comment.user.nombre %></p>
+      <p>Comentario: <%= comment.content %></p>
+      <div>
+        <%= link_to "Comentar", comment_path(comment), class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+  <div class="mt-3">
+    <% if current_user&.admin? %>
+      <%= link_to "Ver comentarios", comments_path(@comment), class:"btn btn-primary" %> 
+    <% end %>
+  </div>
 </div>
 

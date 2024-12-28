@@ -1,6 +1,10 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, except: %i[ index show ]
   before_action :set_post, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :redirect_si_user_no_coincide_con_creador_del_post, only: %i[ edit update destroy]
+  before_action :soy_usuario?, except: %i[ index show ]
+  before_action :soy_registrado?, except: %i[ index show new edit create update ]
+  before_action :soy_admin?, except: %i[ index show new edit create update destroy ]
   
   # GET /posts or /posts.json
   def index
@@ -9,6 +13,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    @comments = @post.comments
   end
 
   # GET /posts/new
@@ -67,6 +72,12 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:image, :title, :description)
+      params.require(:post).permit(:image, :title, :description, :user_id)
+    end
+
+    def redirect_si_user_no_coincide_con_creador_del_post
+      if current_user.id != @post.user_id
+        redirect_to posts_path, notice: "¡No está autorizado para ésto!"
+      end
     end
 end

@@ -1,17 +1,16 @@
-<div id="<%= dom_id post %>">
-  <p>
-    <strong>Image:</strong>
-    <%= post.image %>
-  </p>
-
-  <p>
-    <strong>Title:</strong>
-    <%= post.title %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= post.description %>
-  </p>
-
+<div class="card" style="width: 18rem;">
+  <%= image_tag post.image %>
+  <div class="card-body">
+    <strong><%= post.title %></strong>
+    <p class="card-text"><%= truncate(post.description, length: 100) %></p>
+  </div>
 </div>
+<p>
+    <strong>Comentarios:</strong>
+    <% post.comments.each do |comentario| %>
+      <br>
+      * <%= comentario.content %>
+      (<%= post.user.nombre %>)
+      
+    <% end %>
+</p>

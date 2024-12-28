@@ -1,12 +1,10 @@
-<% content_for :title, "Editing post" %>
-
-<h1>Editing post</h1>
+<h1>Editar Noticia</h1>
 
 <%= render "form", post: @post %>
 
 <br>
 
 <div>
-  <%= link_to "Show this post", @post %> |
-  <%= link_to "Back to posts", posts_path %>
+  <%= link_to "Mostrar Noticia", @post %> |
+  <%= link_to "Volver a Noticias", posts_path %>
 </div>
